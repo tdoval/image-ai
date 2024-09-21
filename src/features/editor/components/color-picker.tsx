@@ -22,7 +22,7 @@ export const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
       <CirclePicker
         color={value}
         colors={colors}
-        onChange={(color) => {
+        onChangeComplete={(color) => {
           const formattedValue = rgbaObjectToString(color.rgb);
           onChange(formattedValue);
         }}

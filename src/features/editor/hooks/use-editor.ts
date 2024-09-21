@@ -6,6 +6,7 @@ import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
   Editor,
+  EditorHookProps,
   FILL_COLOR,
   RECTANGLE_OPTIONS,
   STROKE_COLOR,
@@ -155,14 +156,25 @@ const buildEditor = ({
       addToCanvas(object);
     },
     canvas,
-    fillColor,
+    getActiveFillColor: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return fillColor;
+      }
+
+      const value = selectedObject.get("fill") || fillColor;
+
+      // Currently, gradients & patterns are not supported
+      return value as string;
+    },
     strokeColor,
     strokeWidth,
     selectedObjects,
   };
 };
 
-export const useEditor = () => {
+export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
@@ -182,6 +194,7 @@ export const useEditor = () => {
     canvas,
     container,
     setSelectedObjects,
+    clearSelectionCallback,
   });
 
   const editor = useMemo(() => {
