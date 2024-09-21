@@ -168,7 +168,17 @@ const buildEditor = ({
       // Currently, gradients & patterns are not supported
       return value as string;
     },
-    strokeColor,
+    getActiveStrokeColor: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return fillColor;
+      }
+
+      const value = selectedObject.get("stroke") || strokeColor;
+
+      return value;
+    },
     strokeWidth,
     selectedObjects,
   };
