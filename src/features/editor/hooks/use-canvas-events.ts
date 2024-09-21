@@ -13,7 +13,7 @@ export const useCanvasEvents = ({
 }: UseCanvasEventsProps) => {
   useEffect(() => {
     if (canvas) {
-      canvas.on("selection:create", (e) => {
+      canvas.on("selection:created", (e) => {
         setSelectedObjects(e.selected || []);
       });
       canvas.on("selection:updated", (e) => {
