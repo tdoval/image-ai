@@ -115,6 +115,8 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  getActiveOpacity: () => number;
+  changeOpacity: (value: number) => void;
   bringForward: () => void;
   sendBackwards: () => void;
   changeStrokeColor: (value: string) => void;
