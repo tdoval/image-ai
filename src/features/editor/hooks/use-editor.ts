@@ -12,11 +12,13 @@ import {
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
+  TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
 } from "@/features/editor/types";
 import { useAutoResize } from "@/features/editor/hooks/use-auto-resize";
 import { useCanvasEvents } from "@/features/editor/hooks/use-canvas-events";
 import { isTextType } from "@/features/editor/utils";
+import { ITextboxOptions } from "fabric/fabric-impl";
 
 const buildEditor = ({
   canvas,
@@ -49,6 +51,15 @@ const buildEditor = ({
   };
 
   return {
+    addText: (value, options) => {
+      const object = new fabric.Textbox(value, {
+        ...TEXT_OPTIONS,
+        fill: fillColor,
+        ...options,
+      });
+
+      addToCanvas(object);
+    },
     getActiveOpacity: () => {
       const selectedObject = selectedObjects[0];
 
