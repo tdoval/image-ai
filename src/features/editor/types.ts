@@ -188,6 +188,7 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  addImage: (value: string) => void;
   delete: () => void;
   changeTextAlign: (value: string) => void;
   getActiveTextAlign: () => string;

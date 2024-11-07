@@ -56,6 +56,22 @@ const buildEditor = ({
   };
 
   return {
+    addImage: (value: string) => {
+      fabric.Image.fromURL(
+        value,
+        (image) => {
+          const workspace = getWorkspace();
+
+          image.scaleToWidth(workspace?.width || 0);
+          image.scaleToHeight(workspace?.height || 0);
+
+          addToCanvas(image);
+        },
+        {
+          crossOrigin: "anonymous",
+        },
+      );
+    },
     delete: () => {
       canvas.getActiveObjects().forEach((object) => canvas.remove(object));
       canvas.discardActiveObject();
@@ -465,8 +481,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [fillColor, setFillColor] = useState(FILL_COLOR);
   const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
-  const [strokeDashArray, setStrokeDashArray] =
-    useState<number[]>(STROKE_DASH_ARRAY);
+  const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
 
   console.log(selectedObjects);
 
@@ -501,15 +516,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     }
 
     return undefined;
-  }, [
-    canvas,
-    fillColor,
-    strokeColor,
-    strokeWidth,
-    selectedObjects,
-    strokeDashArray,
-    fontFamily,
-  ]);
+  }, [canvas, fillColor, strokeColor, strokeWidth, selectedObjects, strokeDashArray, fontFamily]);
 
   const init = useCallback(
     ({
