@@ -12,18 +12,14 @@ import {
 } from "lucide-react";
 import { RxTransparencyGrid } from "react-icons/rx";
 
-import {
-  ActiveTool,
-  Editor,
-  FONT_SIZE,
-  FONT_WEIGHT,
-} from "@/features/editor/types";
+import { ActiveTool, Editor, FONT_SIZE, FONT_WEIGHT } from "@/features/editor/types";
 
 import { cn } from "@/lib/utils";
 import { Hint } from "@/components/hint";
 import { Button } from "@/components/ui/button";
 import { isTextType } from "@/features/editor/utils";
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
+import { TbColorFilter } from "react-icons/tb";
 import { FontSizeInput } from "@/features/editor/components/font-size-input";
 
 interface ToolbarProps {
@@ -32,11 +28,7 @@ interface ToolbarProps {
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
-export const Toolbar = ({
-  editor,
-  activeTool,
-  onChangeActiveTool,
-}: ToolbarProps) => {
+export const Toolbar = ({ editor, activeTool, onChangeActiveTool }: ToolbarProps) => {
   const initialFillColor = editor?.getActiveFillColor();
   const initialStrokeColor = editor?.getActiveStrokeColor();
   const initialFontFamily = editor?.getActiveFontFamily();
@@ -63,6 +55,7 @@ export const Toolbar = ({
   const selectedObjectType = editor?.selectedObjects[0]?.type;
 
   const isText = isTextType(selectedObjectType);
+  const isImage = selectedObjectType === "image";
 
   const onChangeFontSize = (value: number) => {
     if (!selectedObject) return;
@@ -141,23 +134,25 @@ export const Toolbar = ({
 
   return (
     <div className="shrink-0 h-[56px] border-b bg-white w-full flex items-center overflow-x-auto z-[49] p-2 gap-x-2">
-      <div className="flex items-center h-full justify-center">
-        <Hint label="color" side="bottom" sideOffset={5}>
-          <Button
-            onClick={() => onChangeActiveTool("fill")}
-            size={"icon"}
-            variant={"ghost"}
-            className={cn(activeTool === "fill" && "bg-gray-100")}
-          >
-            <div
-              className="rounded-sm size-4 border"
-              style={{
-                backgroundColor: properties.fillColor,
-              }}
-            />
-          </Button>
-        </Hint>
-      </div>
+      {!isImage && (
+        <div className="flex items-center h-full justify-center">
+          <Hint label="color" side="bottom" sideOffset={5}>
+            <Button
+              onClick={() => onChangeActiveTool("fill")}
+              size={"icon"}
+              variant={"ghost"}
+              className={cn(activeTool === "fill" && "bg-gray-100")}
+            >
+              <div
+                className="rounded-sm size-4 border"
+                style={{
+                  backgroundColor: properties.fillColor,
+                }}
+              />
+            </Button>
+          </Hint>
+        </div>
+      )}
       {!isText && (
         <div className="flex items-center h-full justify-center">
           <Hint label="Stroke color" side="bottom" sideOffset={5}>
@@ -196,14 +191,9 @@ export const Toolbar = ({
               onClick={() => onChangeActiveTool("font")}
               size="icon"
               variant="ghost"
-              className={cn(
-                "w-auto px-2 text-sm",
-                activeTool === "font" && "bg-gray-100",
-              )}
+              className={cn("w-auto px-2 text-sm", activeTool === "font" && "bg-gray-100")}
             >
-              <div className="max-w-[100px] truncate">
-                {properties.fontFamily}
-              </div>
+              <div className="max-w-[100px] truncate">{properties.fontFamily}</div>
               <ChevronDown className="size-4 ml-2 shrink-0" />
             </Button>
           </Hint>
@@ -309,31 +299,34 @@ export const Toolbar = ({
       )}
       {isText && (
         <div className="flex items-center h-full justify-center">
-          <FontSizeInput
-            value={properties.fontSize}
-            onChange={onChangeFontSize}
-          />
+          <FontSizeInput value={properties.fontSize} onChange={onChangeFontSize} />
+        </div>
+      )}
+      {isImage && (
+        <div className="flex items-center h-full justify-center">
+          <Hint label="Filters" side="bottom" sideOffset={5}>
+            <Button
+              onClick={() => onChangeActiveTool("filter")}
+              size="icon"
+              variant="ghost"
+              className={cn(activeTool === "filter" && "bg-gray-100")}
+            >
+              <TbColorFilter className="size-4" />
+            </Button>
+          </Hint>
         </div>
       )}
 
       <div className="flex items-center h-full justify-center">
         <Hint label="Bring Forward" side="bottom" sideOffset={5}>
-          <Button
-            onClick={() => editor?.bringForward()}
-            size="icon"
-            variant="ghost"
-          >
+          <Button onClick={() => editor?.bringForward()} size="icon" variant="ghost">
             <ArrowUp className="size-4" />
           </Button>
         </Hint>
       </div>
       <div className="flex items-center h-full justify-center">
         <Hint label="Send Backwards" side="bottom" sideOffset={5}>
-          <Button
-            onClick={() => editor?.sendBackwards()}
-            size="icon"
-            variant="ghost"
-          >
+          <Button onClick={() => editor?.sendBackwards()} size="icon" variant="ghost">
             <ArrowDown className="size-4" />
           </Button>
         </Hint>
