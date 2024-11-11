@@ -71,11 +71,8 @@ const buildEditor = ({
       });
     },
     addImage: (value: string) => {
-      const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(value)}`;
-      console.log(proxyUrl);
-
       fabric.Image.fromURL(
-        proxyUrl,
+        value,
         (image) => {
           const workspace = getWorkspace();
 

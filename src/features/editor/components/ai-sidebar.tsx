@@ -28,7 +28,6 @@ export const AiSidebar = ({ editor, activeTool, onChangeActiveTool }: AiSidebarP
       { prompt: value },
       {
         onSuccess: ({ data }) => {
-          console.log(data);
           editor?.addImage(data);
         },
       },
