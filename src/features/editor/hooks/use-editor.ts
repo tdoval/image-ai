@@ -71,8 +71,11 @@ const buildEditor = ({
       });
     },
     addImage: (value: string) => {
+      const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(value)}`;
+      console.log(proxyUrl);
+
       fabric.Image.fromURL(
-        value,
+        proxyUrl,
         (image) => {
           const workspace = getWorkspace();
 
@@ -496,8 +499,6 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
-
-  console.log(selectedObjects);
 
   useAutoResize({
     canvas,

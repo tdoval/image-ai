@@ -1,7 +1,7 @@
 import { unsplash } from "@/lib/unsplash";
 import { Hono } from "hono";
 
-const DEFAULT_COUNT = 50;
+const DEFAULT_COUNT = 30;
 const DEFAULT_COLLECTION_IDS = ["317099"];
 
 const app = new Hono().get("/", async (c) => {
@@ -24,7 +24,6 @@ const app = new Hono().get("/", async (c) => {
   if (!Array.isArray(response)) {
     response = [response];
   }
-
   return c.json({ data: response });
 });
 
