@@ -25,24 +25,6 @@ import { RemoveBgSidebar } from "@/features/editor/components/remove-bg-sidebar"
 const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
 
-  const onChangeActiveTool = useCallback(
-    (tool: ActiveTool) => {
-      if (tool === activeTool) {
-        return setActiveTool("select");
-      }
-
-      if (tool === "draw") {
-        // TODO: Enable draw mode
-      }
-
-      if (activeTool === "draw") {
-        // TODO: disable draw mode
-      }
-      setActiveTool(tool);
-    },
-    [activeTool],
-  );
-
   const onClearSlection = useCallback(() => {
     if (selectionDependentTools.includes(activeTool)) {
       setActiveTool("select");
@@ -52,6 +34,25 @@ const Editor = () => {
   const { init, editor } = useEditor({
     clearSelectionCallback: onClearSlection,
   });
+
+  const onChangeActiveTool = useCallback(
+    (tool: ActiveTool) => {
+      if (tool === "draw") {
+        editor?.enableDrawingMode();
+      }
+
+      if (activeTool === "draw") {
+        editor?.disableDrawingMode();
+      }
+
+      if (tool === activeTool) {
+        return setActiveTool("select");
+      }
+
+      setActiveTool(tool);
+    },
+    [activeTool, editor],
+  );
 
   const canvasRef = useRef(null);
   const containerRef = useRef<HTMLDivElement>(null);
