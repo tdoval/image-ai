@@ -56,6 +56,7 @@ export const SettingsSidebar = ({
 
   const onClose = () => {
     onChangeActiveTool("select");
+    
   };
 
   return (
