@@ -2,6 +2,7 @@ import { fabric } from "fabric";
 import { useEffect } from "react";
 
 interface UseCanvasEventsProps {
+  save: () => void;
   canvas: fabric.Canvas | null;
   container: HTMLDivElement | null;
   setSelectedObjects: (objects: fabric.Object[]) => void;
@@ -9,12 +10,16 @@ interface UseCanvasEventsProps {
 }
 
 export const useCanvasEvents = ({
+  save,
   canvas,
   setSelectedObjects,
   clearSelectionCallback,
 }: UseCanvasEventsProps) => {
   useEffect(() => {
     if (canvas) {
+      canvas.on("object:added", () => save());
+      canvas.on("object:removed", () => save());
+      canvas.on("object:modified", () => save());
       canvas.on("selection:created", (e) => {
         setSelectedObjects(e.selected || []);
       });
@@ -29,10 +34,13 @@ export const useCanvasEvents = ({
 
     return () => {
       if (canvas) {
+        canvas.off("object:added");
+        canvas.off("object:removed");
+        canvas.off("object:modified");
         canvas.off("selection:create");
         canvas.off("selection:updated");
         canvas.off("selection:cleared");
       }
     };
-  }, [canvas, setSelectedObjects, clearSelectionCallback]);
+  }, [save, canvas, setSelectedObjects, clearSelectionCallback]);
 };

@@ -2,13 +2,7 @@
 
 import { Logo } from "@/features/editor/components/logo";
 
-import {
-  ChevronDown,
-  Download,
-  MousePointerClick,
-  Redo2,
-  Undo2,
-} from "lucide-react";
+import { ChevronDown, Download, MousePointerClick, Redo2, Undo2 } from "lucide-react";
 import { CiFileOn } from "react-icons/ci";
 
 import { Button } from "@/components/ui/button";
@@ -22,16 +16,17 @@ import { Separator } from "@/components/ui/separator";
 
 import { Hint } from "@/components/hint";
 import { BsCloudCheck } from "react-icons/bs";
-import { ActiveTool } from "@/features/editor/types";
+import { ActiveTool, Editor } from "@/features/editor/types";
 
 import { cn } from "@/lib/utils";
 
 interface NavbarProps {
+  editor: Editor | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
-export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
+export const Navbar = ({ editor, activeTool, onChangeActiveTool }: NavbarProps) => {
   return (
     <nav className="w-full flex items-center p-4 h-[68px] gap-x-8 border-b lg:pl-[34px]">
       <Logo />
@@ -51,9 +46,7 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
               <CiFileOn className="size-8" />
               <div>
                 <p>Open</p>
-                <p className="text-xs text-muted-foreground">
-                  Open a JSON file
-                </p>
+                <p className="text-xs text-muted-foreground">Open a JSON file</p>
               </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -71,20 +64,20 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
         </Hint>
         <Hint label="Undo" side="bottom" sideOffset={10}>
           <Button
+            disabled={!editor?.canUndo()}
             variant={"ghost"}
             size={"icon"}
-            onClick={() => {}} // TODO: Add functionality
-            className="" // TODO: Add dynamic class
+            onClick={() => editor?.onUndo()}
           >
             <Undo2 className="size-4" />
           </Button>
         </Hint>
         <Hint label="Redo" side="bottom" sideOffset={10}>
           <Button
+            disabled={!editor?.canRedo()}
             variant={"ghost"}
             size={"icon"}
-            onClick={() => {}} // TODO: Add functionality
-            className="" // TODO: Add dynamic class
+            onClick={() => editor?.onRedo()}
           >
             <Redo2 className="size-4" />
           </Button>
@@ -102,46 +95,28 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-60">
-              <DropdownMenuItem
-                className="flex items-center gap-x-2"
-                onClick={() => {}}
-              >
+              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
                 <CiFileOn className="size-8" />
                 <div>
                   <p>Json</p>
-                  <p className="text-xs text-muted-foreground">
-                    Save for later editing
-                  </p>
+                  <p className="text-xs text-muted-foreground">Save for later editing</p>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                className="flex items-center gap-x-2"
-                onClick={() => {}}
-              >
+              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
                 <CiFileOn className="size-8" />
                 <div>
                   <p>PNG</p>
-                  <p className="text-xs text-muted-foreground">
-                    Best for sharing on the web
-                  </p>
+                  <p className="text-xs text-muted-foreground">Best for sharing on the web</p>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                className="flex items-center gap-x-2"
-                onClick={() => {}}
-              >
+              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
                 <CiFileOn className="size-8" />
                 <div>
                   <p>JPG</p>
-                  <p className="text-xs text-muted-foreground">
-                    Best for printing
-                  </p>
+                  <p className="text-xs text-muted-foreground">Best for printing</p>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                className="flex items-center gap-x-2"
-                onClick={() => {}}
-              >
+              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
                 <CiFileOn className="size-8" />
                 <div>
                   <p>SVG</p>
