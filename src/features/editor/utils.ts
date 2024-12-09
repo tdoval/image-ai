@@ -1,5 +1,38 @@
 import { fabric } from "fabric";
 import { RGBColor } from "react-color";
+import { uuid } from "uuidv4";
+
+export function transformText(objects: any[]): any[] {
+  if (!Array.isArray(objects)) return [];
+
+  return objects.map((item) => {
+    if (item && Array.isArray(item.objects)) {
+      return {
+        ...item,
+        objects: transformText(item.objects),
+      };
+    }
+
+    if (item && item.type === "text") {
+      return {
+        ...item,
+        type: "textbox",
+      };
+    }
+
+    return item;
+  });
+}
+
+export function downloadFile(file: string, type: string) {
+  const anchorElement = document.createElement("a");
+
+  anchorElement.href = file;
+  anchorElement.download = `${uuid()}.${type}`;
+  document.body.appendChild(anchorElement);
+  anchorElement.click();
+  anchorElement.remove();
+}
 
 export function isTextType(type: string | undefined) {
   return type === "text" || type === "textbox" || type === "i-text";
